@@ -4,11 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
+    <!-- THẺ META ĐỂ HIỂN THỊ CHÚ THÍCH KHI GỬI LINK (ZALO, FACEBOOK) -->
     <meta name="description" content="Crocs and More - Only Authentic. Xem toàn bộ sản phẩm tại đây !">
+    
     <meta property="og:title" content="Trạm Authentic">
     <meta property="og:description" content="Crocs and More - Only Authentic. Xem toàn bộ sản phẩm tại đây !">
     <meta property="og:type" content="website">
     
+    <!-- ẢNH THUMBNAIL -->
     <meta property="og:image" content="https://i.ibb.co/mC8S0ZFW/742391336-1708520960293067-5985613076031239359-n.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -17,13 +20,16 @@
     
     <title>Trạm Authentic</title>
     
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font: Be Vietnam Pro -->
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         body {
             font-family: 'Be Vietnam Pro', sans-serif;
-            background-color: #ffffff; 
+            background-color: #fcfcfc; 
             color: #111111;
             -webkit-font-smoothing: antialiased;
         }
@@ -31,19 +37,24 @@
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #e5e7eb; }
-        
-        .hide-scroll::-webkit-scrollbar { display: none; }
-        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
 
+        /* Lưới Ảnh - h-fit để ôm sát nội dung, không tạo khoảng trắng thừa */
         .image-grid { 
             display: grid; 
             grid-template-columns: repeat(2, 1fr); 
-            gap: 12px; 
+            gap: 16px; 
             align-items: start; 
         }
         @media (min-width: 768px) { .image-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; } }
         @media (min-width: 1024px) { .image-grid { grid-template-columns: repeat(4, 1fr); gap: 24px; } }
 
+        /* Hiệu ứng Hover Thẻ Sản Phẩm */
+        .card-hover-effect { transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s ease; }
+        .group:hover .card-hover-effect { transform: translateY(-6px); box-shadow: 0 15px 35px -5px rgba(0,0,0,0.1); }
+        .img-hover-zoom { transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .group:hover .img-hover-zoom { transform: scale(1.06); }
+
+        /* ANIMATION */
         @keyframes fadeUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
         .animate-fade-up { opacity: 0; animation: fadeUp 0.5s ease-out forwards; }
         @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
@@ -51,6 +62,7 @@
         @keyframes shimmer { 100% { transform: translateX(100%); } }
         .skeleton-shimmer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, #f3f4f6 0%, #e5e7eb 50%, #f3f4f6 100%); transform: translateX(-100%); animation: shimmer 1.5s infinite; }
 
+        /* Nút Tag */
         .tag-btn {
             padding: 8px 16px;
             border-radius: 99px;
@@ -61,13 +73,16 @@
             border: 1px solid #e5e7eb;
             color: #6b7280;
             background: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
         .tag-btn.active {
             background: #000;
             color: #fff;
             border-color: #000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
         }
         
+        /* Buttons Outline */
         .btn-outline {
             display: flex;
             align-items: center;
@@ -84,11 +99,9 @@
             letter-spacing: 0.1em;
             transition: all 0.3s ease;
         }
-        .btn-outline:hover {
-            background: #000;
-            color: #fff;
-        }
+        .btn-outline:hover { background: #000; color: #fff; }
         
+        /* Admin Form */
         .admin-input {
             width: 100%;
             padding: 12px;
@@ -99,10 +112,25 @@
             transition: border-color 0.2s;
         }
         .admin-input:focus { border-color: #000; }
+        
+        /* Upload Category Buttons */
+        .upload-cat-btn {
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #6b7280;
+            background: #fff;
+            transition: all 0.2s;
+        }
+        .upload-cat-btn.active { background: #000; color: #fff; border-color: #000; }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col relative">
 
+    <!-- Header -->
     <header class="sticky top-0 z-40 w-full bg-white/90 backdrop-blur-md pt-6 pb-4 px-4 text-center cursor-pointer transition duration-300 border-b border-gray-100" onclick="window.scrollTo({ top: 0, behavior: 'smooth' });">
         <h1 class="text-xl md:text-2xl font-extrabold tracking-[0.2em] uppercase text-black">
             TRẠM AUTHENTIC
@@ -113,23 +141,26 @@
         <p class="text-gray-500 text-sm font-medium tracking-wide">Crocs and More - Only Authentic</p>
     </div>
 
+    <!-- Căn giữa Tag Filters -->
     <div id="tags-wrapper" class="w-full pb-8 px-4 relative z-30">
         <div id="tags-container" class="max-w-3xl mx-auto flex flex-wrap justify-center gap-2.5">
-            <!-- JS sẽ chèn Tag vào đây -->
+            <!-- JS chèn Tag -->
         </div>
     </div>
 
-    <main class="flex-grow px-3 md:px-12 max-w-[1200px] mx-auto w-full relative pb-20">
+    <main class="flex-grow px-4 md:px-12 max-w-[1200px] mx-auto w-full relative pb-20">
         
         <div id="loader" class="text-center py-20 flex flex-col items-center justify-center">
             <svg class="animate-spin h-6 w-6 text-gray-300 mb-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
             <span class="font-medium text-gray-400 tracking-widest uppercase text-[10px]">Đang tải kho...</span>
         </div>
         
+        <!-- Khung chứa lưới sản phẩm -->
         <div id="catalog-grid" class="image-grid hidden"></div>
     </main>
 
-    <footer class="mt-auto bg-white text-black pt-12 pb-12 px-4 border-t border-gray-100 relative z-20">
+    <!-- Footer -->
+    <footer class="mt-auto bg-white text-black pt-12 pb-12 px-4 border-t border-gray-100 relative z-20 shadow-[0_-5px_20px_rgba(0,0,0,0.02)]">
         <div class="max-w-2xl mx-auto flex flex-col items-center text-center">
             <h3 class="text-[14px] font-bold tracking-[0.2em] uppercase text-black mb-4">
                 TRẠM AUTHENTIC
@@ -139,6 +170,7 @@
                 Bảo hành Authentic trọn đời
             </p>
 
+            <!-- Hàng Icons -->
             <div class="flex items-center justify-center gap-6 mb-8 text-gray-600">
                 <a href="https://maps.app.goo.gl/TWMj8grD3ApBEgmj7" target="_blank" title="Vị trí Tiệm" class="hover:text-black transition-transform hover:-translate-y-1">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
@@ -154,18 +186,23 @@
                 </a>
             </div>
 
-            <button id="admin-trigger-btn" class="w-8 h-8 rounded-full border border-transparent hover:border-gray-200 transition text-transparent"></button>
+            <!-- Nút Admin Portal làm mờ -->
+            <button id="admin-trigger-btn" class="text-[10px] font-bold uppercase tracking-widest text-gray-300 hover:text-gray-600 transition-colors">
+                Admin Portal
+            </button>
         </div>
     </footer>
 
+    <!-- Modal Xem Ảnh Chi tiết -->
     <div id="product-modal" class="fixed inset-0 z-50 hidden bg-white/95 backdrop-blur-sm flex flex-col p-4 transition-opacity overflow-y-auto">
-        <button id="close-modal" class="absolute top-4 right-4 text-black p-2 z-10">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+        <button id="close-modal" class="absolute top-4 right-4 text-black p-2 z-10 bg-gray-100 rounded-full hover:bg-gray-200 transition">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
         
-        <div class="max-w-md w-full mx-auto mt-12 animate-fade-up flex flex-col h-fit pb-10">
-            <div class="w-full bg-gray-50 border border-gray-100 mb-6 aspect-square flex items-center justify-center relative">
-                <img id="modal-img" src="" alt="Trạm Authentic" class="w-full h-full object-cover">
+        <div class="max-w-md w-full mx-auto mt-8 animate-fade-up flex flex-col h-fit pb-10">
+            <!-- Modal 3:4 và object-contain để xem toàn bộ ảnh -->
+            <div class="w-full bg-[#fbfbfb] rounded-2xl border border-gray-100 shadow-sm mb-6 aspect-[3/4] flex items-center justify-center relative p-2">
+                <img id="modal-img" src="" alt="Trạm Authentic" class="w-full h-full object-contain">
             </div>
             
             <div class="text-center mb-8">
@@ -174,65 +211,68 @@
             </div>
             
             <div class="flex flex-col gap-3 w-full px-2">
-                <a href="https://zalo.me/0911980814" target="_blank" class="btn-outline">
+                <a href="https://zalo.me/0911980814" target="_blank" class="btn-outline rounded-xl">
                     Nhắn tin Zalo
                 </a>
-                <a href="https://www.facebook.com/profile.php?id=61552216063954" target="_blank" class="btn-outline">
+                <a href="https://www.facebook.com/profile.php?id=61552216063954" target="_blank" class="btn-outline rounded-xl">
                     Nhắn tin Facebook
                 </a>
             </div>
         </div>
     </div>
 
+    <!-- Modal Nhập Pass -->
     <div id="password-modal" class="fixed inset-0 z-[70] hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white p-8 rounded-none max-w-xs w-full text-center animate-fade-in border border-gray-200">
-            <h2 class="text-xs font-bold mb-6 uppercase tracking-widest">Admin Portal</h2>
-            <input type="password" id="pass-input" class="w-full border-b border-gray-300 px-2 py-2 mb-4 text-center text-xl tracking-[0.5em] focus:outline-none focus:border-black transition-colors rounded-none" placeholder="****">
+        <div class="bg-white p-8 max-w-xs w-full text-center animate-fade-in rounded-xl shadow-2xl">
+            <h2 class="text-xs font-bold mb-6 uppercase tracking-widest text-gray-800">Admin Portal</h2>
+            <input type="password" id="pass-input" class="w-full border-b-2 border-gray-200 px-2 py-2 mb-4 text-center text-xl tracking-[0.5em] focus:outline-none focus:border-black transition-colors bg-gray-50 rounded-t" placeholder="****">
             <p id="pass-error" class="text-red-500 text-[10px] mb-4 font-bold uppercase tracking-widest hidden">Sai mật mã</p>
             <div class="flex gap-2">
-                <button id="cancel-pass-btn" class="flex-1 py-3 border border-black text-black text-[10px] font-bold uppercase tracking-widest">Đóng</button>
-                <button id="submit-pass-btn" class="flex-1 py-3 bg-black text-white border border-black text-[10px] font-bold uppercase tracking-widest">Vào</button>
+                <button id="cancel-pass-btn" class="flex-1 py-3 border border-gray-200 rounded-lg text-gray-600 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 transition">Đóng</button>
+                <button id="submit-pass-btn" class="flex-1 py-3 bg-black text-white rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-gray-800 transition shadow-md">Vào</button>
             </div>
         </div>
     </div>
 
-    <div id="admin-section" class="fixed inset-0 z-[60] hidden bg-white overflow-y-auto">
-        <div class="max-w-3xl mx-auto p-4 md:p-8 relative min-h-screen pb-24 animate-fade-up bg-white">
+    <!-- Khu Vực Admin -->
+    <div id="admin-section" class="fixed inset-0 z-[60] hidden bg-gray-50 overflow-y-auto">
+        <div class="max-w-3xl mx-auto p-4 md:p-8 relative min-h-screen pb-24 animate-fade-up bg-white shadow-xl min-h-screen">
             <div class="flex justify-between items-center border-b pb-4 mb-8 mt-2">
                 <h2 class="text-lg font-bold uppercase tracking-widest">Quản Lý Kho</h2>
-                <button id="close-admin" class="text-gray-400 hover:text-black transition">ĐÓNG</button>
+                <button id="close-admin" class="text-gray-400 hover:text-black transition font-bold text-xs">ĐÓNG ✕</button>
             </div>
             
-            <div class="mb-12">
+            <!-- Đăng Sản Phẩm Mới -->
+            <div class="mb-12 bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
                 <h3 class="font-bold text-[11px] uppercase tracking-widest text-gray-500 mb-4">Thêm sản phẩm mới</h3>
                 
-                <input type="file" id="image-input" accept="image/*" class="w-full mb-4 text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-6 file:border file:border-gray-200 file:bg-transparent file:text-[10px] file:font-bold file:uppercase file:tracking-widest hover:file:bg-gray-50 cursor-pointer">
+                <input type="file" id="image-input" accept="image/*" class="w-full mb-6 text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-6 file:rounded-lg file:border-0 file:bg-gray-100 file:text-[10px] file:font-bold file:uppercase file:tracking-widest hover:file:bg-gray-200 cursor-pointer transition">
                 
-                <div class="mb-4">
-                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-2">Chọn Danh Mục</label>
-                    <select id="upload-category" class="admin-input">
-                        <!-- Chèn từ JS -->
-                    </select>
-                </div>
-
                 <div class="mb-6">
-                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-2">Nhập Size (Cách nhau bằng dấu phẩy)</label>
-                    <input type="text" id="upload-size" class="admin-input" placeholder="VD: S, M, L hoặc 40, 41, 42">
+                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-3">Chọn Danh Mục</label>
+                    <!-- Nút Chọn danh mục thay cho danh sách thả xuống -->
+                    <div id="upload-category-buttons" class="flex flex-wrap gap-2"></div>
                 </div>
 
-                <button id="upload-btn" class="w-full bg-black text-white py-3.5 text-[11px] font-bold tracking-widest uppercase hover:bg-gray-800 transition">
+                <div class="mb-8">
+                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-2">Nhập Size (Cách nhau bằng dấu phẩy)</label>
+                    <input type="text" id="upload-size" class="admin-input rounded-lg bg-gray-50" placeholder="VD: S, M, L hoặc 40, 41, 42">
+                </div>
+
+                <button id="upload-btn" class="w-full bg-black text-white py-4 rounded-xl text-[11px] font-bold tracking-widest uppercase hover:bg-gray-800 transition shadow-lg">
                     Tải lên Hệ Thống
                 </button>
                 <div id="upload-status" class="text-center text-[11px] mt-4 font-bold h-4"></div>
             </div>
 
-            <div class="border-t pt-8">
-                <h3 class="font-bold text-[11px] uppercase tracking-widest text-gray-500 mb-4">Kho Hàng Hiện Tại</h3>
+            <!-- Xem Kho & Xóa -->
+            <div class="border-t border-gray-100 pt-8">
+                <h3 class="font-bold text-[11px] uppercase tracking-widest text-gray-500 mb-6 text-center">Kho Hàng Hiện Tại</h3>
                 
-                <div class="mb-6 flex flex-wrap gap-2" id="admin-tags-container"></div>
+                <div class="mb-8 flex flex-wrap justify-center gap-2" id="admin-tags-container"></div>
                 <div id="admin-delete-status" class="text-[10px] font-bold text-center text-red-600 mb-4 uppercase tracking-widest h-4"></div>
 
-                <div id="admin-product-list" class="grid grid-cols-3 md:grid-cols-4 gap-2">
+                <div id="admin-product-list" class="grid grid-cols-2 md:grid-cols-4 gap-3 p-2">
                     <!-- Ảnh admin sinh ra đây -->
                 </div>
             </div>
@@ -264,7 +304,11 @@
         let shoesData = [];
         let currentFilter = 'Tất cả';
         let currentAdminFilter = 'Tất cả';
+        
+        // Mặc định chọn danh mục đầu tiên (không tính 'Tất cả') cho form Upload
+        let selectedUploadCategory = 'Áo Đấu';
 
+        // DOM
         const tagsContainer = document.getElementById('tags-container');
         const catalogGrid = document.getElementById('catalog-grid');
         const loader = document.getElementById('loader');
@@ -274,11 +318,13 @@
         const modalSize = document.getElementById('modal-size-text');
         
         const adminSec = document.getElementById('admin-section');
-        const adminUploadCat = document.getElementById('upload-category');
+        const adminUploadCatBtns = document.getElementById('upload-category-buttons');
         const adminTagsContainer = document.getElementById('admin-tags-container');
         const adminProductList = document.getElementById('admin-product-list');
         
+        // Sinh Nút Tag cho Khách và Admin
         CATEGORIES.forEach(cat => {
+            // 1. Nút cho Khách Hàng (Ngoài Trang Chủ)
             const btn = document.createElement('button');
             btn.className = `tag-btn ${cat === 'Tất cả' ? 'active' : ''}`;
             btn.innerText = cat;
@@ -290,18 +336,28 @@
             };
             tagsContainer.appendChild(btn);
             
+            // 2. Nút Chọn Danh Mục khi Upload (Admin)
             if(cat !== 'Tất cả') {
-                const opt = document.createElement('option');
-                opt.value = cat; opt.innerText = cat;
-                adminUploadCat.appendChild(opt);
+                const upBtn = document.createElement('button');
+                upBtn.className = `upload-cat-btn ${cat === selectedUploadCategory ? 'active' : ''}`;
+                upBtn.innerText = cat;
+                upBtn.onclick = () => {
+                    document.querySelectorAll('#upload-category-buttons .upload-cat-btn').forEach(b => b.classList.remove('active'));
+                    upBtn.classList.add('active');
+                    selectedUploadCategory = cat;
+                };
+                adminUploadCatBtns.appendChild(upBtn);
             }
 
+            // 3. Nút Lọc Danh Mục Kho (Admin)
             const adBtn = document.createElement('button');
-            adBtn.className = `px-3 py-1 border text-[10px] font-bold uppercase transition ${cat === 'Tất cả' ? 'bg-black text-white border-black' : 'bg-transparent text-gray-500 border-gray-200'}`;
+            adBtn.className = `px-4 py-1.5 rounded-full border text-[10px] font-bold uppercase transition ${cat === 'Tất cả' ? 'bg-black text-white border-black' : 'bg-transparent text-gray-500 border-gray-200 hover:bg-gray-100'}`;
             adBtn.innerText = cat;
             adBtn.onclick = () => {
-                document.querySelectorAll('#admin-tags-container button').forEach(b => { b.className = 'px-3 py-1 border text-[10px] font-bold uppercase transition bg-transparent text-gray-500 border-gray-200'; });
-                adBtn.className = 'px-3 py-1 border text-[10px] font-bold uppercase transition bg-black text-white border-black';
+                document.querySelectorAll('#admin-tags-container button').forEach(b => { 
+                    b.className = 'px-4 py-1.5 rounded-full border text-[10px] font-bold uppercase transition bg-transparent text-gray-500 border-gray-200 hover:bg-gray-100'; 
+                });
+                adBtn.className = 'px-4 py-1.5 rounded-full border text-[10px] font-bold uppercase transition bg-black text-white border-black';
                 currentAdminFilter = cat;
                 renderAdminList();
             };
@@ -328,8 +384,8 @@
 
             if(shoesData.length === 0) {
                 filtered = [
-                    { imageUrl: "https://i.ibb.co/mC8S0ZFW/742391336-1708520960293067-5985613076031239359-n.jpg", sizeText: "M, L, XL" },
-                    { imageUrl: "https://i.ibb.co/mC8S0ZFW/742391336-1708520960293067-5985613076031239359-n.jpg", sizeText: "40, 41, 42" }
+                    { imageUrl: "https://i.ibb.co/mC8S0ZFW/742391336-1708520960293067-5985613076031239359-n.jpg", sizeText: "M, L, XL", category: "Áo Đấu" },
+                    { imageUrl: "https://i.ibb.co/mC8S0ZFW/742391336-1708520960293067-5985613076031239359-n.jpg", sizeText: "40, 41, 42", category: "Giày" }
                 ];
             }
 
@@ -340,17 +396,23 @@
 
             filtered.forEach(item => {
                 const card = document.createElement('div');
-                card.className = 'group cursor-pointer flex flex-col h-fit bg-gray-50 border border-gray-100 p-2 transition-all hover:border-black animate-fade-up';
+                // Giao diện Khung Ảnh Đẹp - Bo góc, đổ bóng mờ
+                card.className = 'group cursor-pointer flex flex-col h-fit bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm animate-fade-up card-hover-effect';
                 
-                const optUrl = item.imageUrl.includes("tr=") ? item.imageUrl : item.imageUrl + "?tr=w-500,h-500,fo-auto,f-webp,q-80";
+                // Yêu cầu ImageKit nén WebP, không ép cắt h-500 nữa
+                const optUrl = item.imageUrl.includes("tr=") ? item.imageUrl : item.imageUrl + "?tr=w-500,fo-auto,f-webp,q-80";
                 
+                // Đổi aspect-square (1:1) thành aspect-[3/4] (Khung chữ nhật dọc)
+                // Đổi object-cover thành object-contain để ảnh không bị cắt xén
                 card.innerHTML = `
-                    <div class="relative w-full aspect-square bg-[#f0f0f0] overflow-hidden mb-3">
+                    <div class="relative w-full aspect-[3/4] bg-[#fbfbfb] overflow-hidden border-b border-gray-50 flex items-center justify-center">
                         <div class="skeleton-shimmer"></div>
-                        <img src="${optUrl}" class="w-full h-full object-cover relative z-10 opacity-0 transition duration-700 group-hover:scale-105" loading="lazy" onload="this.classList.remove('opacity-0'); this.previousElementSibling.remove();">
+                        <img src="${optUrl}" class="w-full h-full object-contain relative z-10 opacity-0 img-hover-zoom" loading="lazy" onload="this.classList.remove('opacity-0'); this.previousElementSibling.remove();">
                     </div>
-                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 text-center">${item.category || 'Hàng Demo'}</p>
-                    <p class="text-[11px] font-bold text-black uppercase tracking-widest text-center truncate px-1">Size: ${item.sizeText}</p>
+                    <div class="p-3 md:p-4 flex flex-col items-center justify-center bg-white">
+                        <p class="text-[9px] md:text-[10px] font-bold text-gray-400 uppercase tracking-[0.15em] mb-1.5">${item.category || 'Hàng Demo'}</p>
+                        <p class="text-[11px] md:text-xs font-extrabold text-black uppercase tracking-widest text-center truncate w-full px-1">Size: ${item.sizeText}</p>
+                    </div>
                 `;
 
                 card.onclick = () => {
@@ -364,6 +426,7 @@
         
         document.getElementById('close-modal').onclick = () => modal.classList.add('hidden');
 
+        // ==== ADMIN LOGIC ====
         document.getElementById('admin-trigger-btn').onclick = () => {
             document.getElementById('password-modal').classList.remove('hidden');
             document.getElementById('pass-input').value = '';
@@ -383,63 +446,69 @@
         }
         document.getElementById('close-admin').onclick = () => adminSec.classList.add('hidden');
 
+        // UPLOAD DATA
         const uploadBtn = document.getElementById('upload-btn');
         uploadBtn.onclick = async () => {
             const file = document.getElementById('image-input').files[0];
-            const cat = adminUploadCat.value;
             const size = document.getElementById('upload-size').value.trim();
             const sts = document.getElementById('upload-status');
             
             if(!file || !size) { sts.innerHTML = "<span class='text-red-500'>Vui lòng chọn ảnh & nhập size!</span>"; return; }
             
             uploadBtn.disabled = true; uploadBtn.innerText = "Đang Tải Ảnh...";
-            sts.innerHTML = "<span class='text-blue-500'>Đang đẩy lên ImageKit...</span>";
+            sts.innerHTML = "<span class='text-blue-500'>Đang đẩy lên kho ảnh...</span>";
 
             try {
                 const formData = new FormData();
                 formData.append("file", file);
-                formData.append("fileName", "tram-sp-" + Date.now());
+                formData.append("fileName", "tram-" + Date.now());
                 formData.append("folder", "/tramauthentic"); 
 
                 const resIK = await fetch(IK_UPLOAD_ENDPOINT, { method: "POST", headers: { "Authorization": "Basic " + IK_AUTH }, body: formData });
-                if (!resIK.ok) throw new Error("ImageKit lỗi");
+                if (!resIK.ok) throw new Error("Lỗi tải ảnh");
                 const ikData = await resIK.json();
 
                 sts.innerHTML = "<span class='text-blue-500'>Đang lưu Dữ liệu...</span>";
                 await addDoc(collection(db, "products"), {
                     imageUrl: ikData.url,
                     imageKitFileId: ikData.fileId,
-                    category: cat,
+                    category: selectedUploadCategory, // Lấy từ nút đang active
                     sizeText: size,
                     createdAt: serverTimestamp() 
                 });
 
-                sts.innerHTML = "<span class='text-green-500'>Thành Công!</span>";
+                sts.innerHTML = "<span class='text-green-600'>Thành Công!</span>";
                 document.getElementById('image-input').value = '';
                 document.getElementById('upload-size').value = '';
                 
                 await fetchProducts(); renderCatalog(); renderAdminList();
             } catch(e) { sts.innerHTML = `<span class='text-red-500'>Lỗi: ${e.message}</span>`; }
             
-            setTimeout(() => { uploadBtn.disabled = false; uploadBtn.innerText = "Tải lên Hệ thống"; sts.innerHTML = ""; }, 2000);
+            setTimeout(() => { uploadBtn.disabled = false; uploadBtn.innerText = "Tải lên Hệ thống"; sts.innerHTML = ""; }, 2500);
         };
 
+        // ADMIN LIST & DELETE
         function renderAdminList() {
             adminProductList.innerHTML = '';
             let filtered = currentAdminFilter === 'Tất cả' ? shoesData : shoesData.filter(s => s.category === currentAdminFilter);
 
             filtered.forEach(item => {
                 const div = document.createElement('div');
-                div.className = 'relative aspect-square border border-gray-200 group';
+                // Admin cũng dùng khung 3:4 và object-contain để nhìn ảnh chân thực
+                div.className = 'relative aspect-[3/4] border border-gray-200 group rounded-xl overflow-hidden bg-gray-50 flex items-center justify-center';
+                
+                const adminOptUrl = item.imageUrl.includes("tr=") ? item.imageUrl : item.imageUrl + "?tr=w-300,fo-auto,f-webp";
+                
                 div.innerHTML = `
-                    <img src="${item.imageUrl}?tr=w-200,h-200,fo-auto" class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
-                        <button class="del-btn bg-red-600 text-white text-[10px] font-bold px-3 py-1 uppercase tracking-widest">Xóa Bỏ</button>
+                    <img src="${adminOptUrl}" class="w-full h-full object-contain">
+                    <div class="absolute inset-0 bg-black/50 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition p-2 text-center">
+                        <span class="text-white text-[9px] font-bold mb-2">${item.sizeText}</span>
+                        <button class="del-btn bg-red-600 text-white text-[9px] font-bold px-3 py-1.5 rounded uppercase tracking-widest shadow">Xóa Bỏ</button>
                     </div>
                 `;
                 
                 div.querySelector('.del-btn').onclick = async () => {
-                    const ans = confirm("Hành động này sẽ XÓA VĨNH VIỄN ảnh gốc trên ImageKit và dữ liệu trên trang. Tiếp tục?");
+                    const ans = confirm("Hành động này sẽ XÓA VĨNH VIỄN ảnh gốc trên ImageKit và hệ thống. Bạn chắc chứ?");
                     if(!ans) return;
                     
                     const delSts = document.getElementById('admin-delete-status');
@@ -450,7 +519,7 @@
                             await fetch(IK_DELETE_ENDPOINT + item.imageKitFileId, { method: "DELETE", headers: { "Authorization": "Basic " + IK_AUTH } });
                         }
                         await deleteDoc(doc(db, "products", item.id));
-                        delSts.innerText = "Đã xóa vĩnh viễn!";
+                        delSts.innerText = "Đã xóa thành công!";
                         
                         await fetchProducts(); renderCatalog(); renderAdminList();
                         setTimeout(() => { delSts.innerText = ""; }, 2500);
