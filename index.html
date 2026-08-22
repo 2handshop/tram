@@ -38,7 +38,7 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #e5e7eb; }
 
-        /* Lưới Ảnh - h-fit để ôm sát nội dung, không tạo khoảng trắng thừa */
+        /* Lưới Ảnh - h-fit để ôm sát nội dung */
         .image-grid { 
             display: grid; 
             grid-template-columns: repeat(2, 1fr); 
@@ -186,7 +186,7 @@
                 </a>
             </div>
 
-            <!-- Nút Admin Portal làm mờ -->
+            <!-- Nút Admin Portal mờ -->
             <button id="admin-trigger-btn" class="text-[10px] font-bold uppercase tracking-widest text-gray-300 hover:text-gray-600 transition-colors">
                 Admin Portal
             </button>
@@ -200,12 +200,13 @@
         </button>
         
         <div class="max-w-md w-full mx-auto mt-8 animate-fade-up flex flex-col h-fit pb-10">
-            <!-- Modal 3:4 và object-contain để xem toàn bộ ảnh -->
             <div class="w-full bg-[#fbfbfb] rounded-2xl border border-gray-100 shadow-sm mb-6 aspect-[3/4] flex items-center justify-center relative p-2">
                 <img id="modal-img" src="" alt="Trạm Authentic" class="w-full h-full object-contain">
             </div>
             
             <div class="text-center mb-8">
+                <!-- Vùng chú thích trong Modal (Tự ẩn nếu trống) -->
+                <p id="modal-note-text" class="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1.5 hidden"></p>
                 <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-2">Thông tin Size</p>
                 <p id="modal-size-text" class="text-lg font-bold text-black tracking-widest"></p>
             </div>
@@ -229,7 +230,7 @@
             <p id="pass-error" class="text-red-500 text-[10px] mb-4 font-bold uppercase tracking-widest hidden">Sai mật mã</p>
             <div class="flex gap-2">
                 <button id="cancel-pass-btn" class="flex-1 py-3 border border-gray-200 rounded-lg text-gray-600 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 transition">Đóng</button>
-                <button id="submit-pass-btn" class="flex-1 py-3 bg-black text-white rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-gray-800 transition shadow-md">Vào</button>
+                <button id="submit-pass-btn" class="flex-1 py-3 bg-black text-white rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-800 transition shadow-md">Vào</button>
             </div>
         </div>
     </div>
@@ -250,8 +251,13 @@
                 
                 <div class="mb-6">
                     <label class="block text-[10px] font-bold uppercase tracking-widest mb-3">Chọn Danh Mục</label>
-                    <!-- Nút Chọn danh mục thay cho danh sách thả xuống -->
                     <div id="upload-category-buttons" class="flex flex-wrap gap-2"></div>
+                </div>
+
+                <!-- Ô Ghi Chú Mới -->
+                <div class="mb-6">
+                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-2">Ghi chú (Tùy chọn)</label>
+                    <input type="text" id="upload-note" class="admin-input rounded-lg bg-gray-50" placeholder="VD: Hàng mới về, New 99%...">
                 </div>
 
                 <div class="mb-8">
@@ -272,9 +278,7 @@
                 <div class="mb-8 flex flex-wrap justify-center gap-2" id="admin-tags-container"></div>
                 <div id="admin-delete-status" class="text-[10px] font-bold text-center text-red-600 mb-4 uppercase tracking-widest h-4"></div>
 
-                <div id="admin-product-list" class="grid grid-cols-2 md:grid-cols-4 gap-3 p-2">
-                    <!-- Ảnh admin sinh ra đây -->
-                </div>
+                <div id="admin-product-list" class="grid grid-cols-2 md:grid-cols-4 gap-3 p-2"></div>
             </div>
         </div>
     </div>
@@ -296,7 +300,6 @@
         
         const IK_PRIVATE_KEY = "private_VmxMhMF+rrRzNAireiHKHhaRa0Y="; 
         const IK_UPLOAD_ENDPOINT = "https://upload.imagekit.io/api/v1/files/upload";
-        // Bỏ biến DELETE ENDPOINT vì không dùng trực tiếp phía client nữa để tránh lỗi CORS
         const IK_AUTH = btoa(IK_PRIVATE_KEY + ":");
 
         const CATEGORIES = ['Tất cả', 'Áo Đấu', 'Crocs', 'Dép Daily', 'Giày', 'Phụ kiện khác', 'Crocs 2hand'];
@@ -304,8 +307,6 @@
         let shoesData = [];
         let currentFilter = 'Tất cả';
         let currentAdminFilter = 'Tất cả';
-        
-        // Mặc định chọn danh mục đầu tiên (không tính 'Tất cả') cho form Upload
         let selectedUploadCategory = 'Áo Đấu';
 
         // DOM
@@ -316,15 +317,14 @@
         const modal = document.getElementById('product-modal');
         const modalImg = document.getElementById('modal-img');
         const modalSize = document.getElementById('modal-size-text');
+        const modalNote = document.getElementById('modal-note-text');
         
         const adminSec = document.getElementById('admin-section');
         const adminUploadCatBtns = document.getElementById('upload-category-buttons');
         const adminTagsContainer = document.getElementById('admin-tags-container');
         const adminProductList = document.getElementById('admin-product-list');
         
-        // Sinh Nút Tag cho Khách và Admin
         CATEGORIES.forEach(cat => {
-            // 1. Nút cho Khách Hàng (Ngoài Trang Chủ)
             const btn = document.createElement('button');
             btn.className = `tag-btn ${cat === 'Tất cả' ? 'active' : ''}`;
             btn.innerText = cat;
@@ -336,7 +336,6 @@
             };
             tagsContainer.appendChild(btn);
             
-            // 2. Nút Chọn Danh Mục khi Upload (Admin)
             if(cat !== 'Tất cả') {
                 const upBtn = document.createElement('button');
                 upBtn.className = `upload-cat-btn ${cat === selectedUploadCategory ? 'active' : ''}`;
@@ -349,7 +348,6 @@
                 adminUploadCatBtns.appendChild(upBtn);
             }
 
-            // 3. Nút Lọc Danh Mục Kho (Admin)
             const adBtn = document.createElement('button');
             adBtn.className = `px-4 py-1.5 rounded-full border text-[10px] font-bold uppercase transition ${cat === 'Tất cả' ? 'bg-black text-white border-black' : 'bg-transparent text-gray-500 border-gray-200 hover:bg-gray-100'}`;
             adBtn.innerText = cat;
@@ -384,8 +382,8 @@
 
             if(shoesData.length === 0) {
                 filtered = [
-                    { imageUrl: "https://i.ibb.co/mC8S0ZFW/742391336-1708520960293067-5985613076031239359-n.jpg", sizeText: "M, L, XL", category: "Áo Đấu" },
-                    { imageUrl: "https://i.ibb.co/mC8S0ZFW/742391336-1708520960293067-5985613076031239359-n.jpg", sizeText: "40, 41, 42", category: "Giày" }
+                    { imageUrl: "https://i.ibb.co/mC8S0ZFW/742391336-1708520960293067-5985613076031239359-n.jpg", sizeText: "M, L, XL", note: "Mẫu ví dụ", category: "Áo Đấu" },
+                    { imageUrl: "https://i.ibb.co/mC8S0ZFW/742391336-1708520960293067-5985613076031239359-n.jpg", sizeText: "40, 41, 42", note: "", category: "Giày" }
                 ];
             }
 
@@ -396,20 +394,20 @@
 
             filtered.forEach(item => {
                 const card = document.createElement('div');
-                // Giao diện Khung Ảnh Đẹp - Bo góc, đổ bóng mờ
                 card.className = 'group cursor-pointer flex flex-col h-fit bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm animate-fade-up card-hover-effect';
                 
-                // ImageKit Nén WebP, không ép cắt ảnh
                 const optUrl = item.imageUrl.includes("tr=") ? item.imageUrl : item.imageUrl + "?tr=w-500,fo-auto,f-webp,q-80";
                 
-                // Dùng aspect-[3/4] và object-contain để hiển thị trọn vẹn 100% hình ảnh (dọc/ngang đều không bị xén)
+                // Chỉ hiển thị Ghi chú (nếu có) và Size, hoàn toàn bỏ tên danh mục
+                const noteHtml = item.note ? `<p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider mb-0.5 truncate w-full px-1">${item.note}</p>` : '';
+
                 card.innerHTML = `
                     <div class="relative w-full aspect-[3/4] bg-[#fbfbfb] overflow-hidden border-b border-gray-50 flex items-center justify-center">
                         <div class="skeleton-shimmer"></div>
                         <img src="${optUrl}" class="w-full h-full object-contain relative z-10 opacity-0 img-hover-zoom" loading="lazy" onload="this.classList.remove('opacity-0'); this.previousElementSibling.remove();">
                     </div>
                     <div class="p-3 md:p-4 flex flex-col items-center justify-center bg-white">
-                        <p class="text-[9px] md:text-[10px] font-bold text-gray-400 uppercase tracking-[0.15em] mb-1.5">${item.category || 'Hàng Demo'}</p>
+                        ${noteHtml}
                         <p class="text-[11px] md:text-xs font-extrabold text-black uppercase tracking-widest text-center truncate w-full px-1">Size: ${item.sizeText}</p>
                     </div>
                 `;
@@ -417,6 +415,14 @@
                 card.onclick = () => {
                     modalImg.src = item.imageUrl + "?tr=w-800,f-webp,q-90";
                     modalSize.innerText = item.sizeText;
+                    
+                    if(item.note) {
+                        modalNote.innerText = item.note;
+                        modalNote.classList.remove('hidden');
+                    } else {
+                        modalNote.classList.add('hidden');
+                    }
+
                     modal.classList.remove('hidden');
                 };
                 catalogGrid.appendChild(card);
@@ -425,7 +431,7 @@
         
         document.getElementById('close-modal').onclick = () => modal.classList.add('hidden');
 
-        // ==== ADMIN LOGIC ====
+        // Admin Auth
         document.getElementById('admin-trigger-btn').onclick = () => {
             document.getElementById('password-modal').classList.remove('hidden');
             document.getElementById('pass-input').value = '';
@@ -445,11 +451,12 @@
         }
         document.getElementById('close-admin').onclick = () => adminSec.classList.add('hidden');
 
-        // UPLOAD DATA LÊN FIREBASE VÀ IMAGEKIT
+        // UPLOAD DATA
         const uploadBtn = document.getElementById('upload-btn');
         uploadBtn.onclick = async () => {
             const file = document.getElementById('image-input').files[0];
             const size = document.getElementById('upload-size').value.trim();
+            const note = document.getElementById('upload-note').value.trim();
             const sts = document.getElementById('upload-status');
             
             if(!file || !size) { sts.innerHTML = "<span class='text-red-500'>Vui lòng chọn ảnh & nhập size!</span>"; return; }
@@ -463,7 +470,6 @@
                 formData.append("fileName", "tram-" + Date.now());
                 formData.append("folder", "/tramauthentic"); 
 
-                // Gửi ảnh lên ImageKit (Lệnh POST Upload ko bị lỗi CORS)
                 const resIK = await fetch(IK_UPLOAD_ENDPOINT, { method: "POST", headers: { "Authorization": "Basic " + IK_AUTH }, body: formData });
                 if (!resIK.ok) throw new Error("Lỗi tải ảnh");
                 const ikData = await resIK.json();
@@ -472,14 +478,16 @@
                 await addDoc(collection(db, "products"), {
                     imageUrl: ikData.url,
                     imageKitFileId: ikData.fileId,
-                    category: selectedUploadCategory, // Lấy từ nút đang active
+                    category: selectedUploadCategory,
                     sizeText: size,
+                    note: note, // Lưu ghi chú
                     createdAt: serverTimestamp() 
                 });
 
                 sts.innerHTML = "<span class='text-green-600'>Thành Công!</span>";
                 document.getElementById('image-input').value = '';
                 document.getElementById('upload-size').value = '';
+                document.getElementById('upload-note').value = '';
                 
                 await fetchProducts(); renderCatalog(); renderAdminList();
             } catch(e) { sts.innerHTML = `<span class='text-red-500'>Lỗi: ${e.message}</span>`; }
@@ -487,14 +495,12 @@
             setTimeout(() => { uploadBtn.disabled = false; uploadBtn.innerText = "Tải lên Hệ thống"; sts.innerHTML = ""; }, 2500);
         };
 
-        // ADMIN LIST & DELETE
         function renderAdminList() {
             adminProductList.innerHTML = '';
             let filtered = currentAdminFilter === 'Tất cả' ? shoesData : shoesData.filter(s => s.category === currentAdminFilter);
 
             filtered.forEach(item => {
                 const div = document.createElement('div');
-                // Admin cũng dùng khung 3:4 và object-contain để nhìn ảnh chân thực
                 div.className = 'relative aspect-[3/4] border border-gray-200 group rounded-xl overflow-hidden bg-gray-50 flex items-center justify-center';
                 
                 const adminOptUrl = item.imageUrl.includes("tr=") ? item.imageUrl : item.imageUrl + "?tr=w-300,fo-auto,f-webp";
@@ -502,7 +508,8 @@
                 div.innerHTML = `
                     <img src="${adminOptUrl}" class="w-full h-full object-contain">
                     <div class="absolute inset-0 bg-black/50 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition p-2 text-center">
-                        <span class="text-white text-[9px] font-bold mb-2">${item.sizeText}</span>
+                        <span class="text-white text-[9px] font-bold mb-1">${item.sizeText}</span>
+                        ${item.note ? `<span class="text-gray-300 text-[8px] mb-2">${item.note}</span>` : ''}
                         <button class="del-btn bg-red-600 text-white text-[9px] font-bold px-3 py-1.5 rounded uppercase tracking-widest shadow">Xóa Bỏ</button>
                     </div>
                 `;
@@ -515,9 +522,6 @@
                     delSts.innerText = "Đang xóa dữ liệu...";
                     
                     try {
-                        // Đã Tắt lệnh xóa ImageKit trực tiếp từ Frontend để tránh lỗi CORS (Failed to Fetch)
-                        // Ảnh vẫn còn lưu tạm trên ImageKit nhưng sẽ hoàn toàn biến mất khỏi Website (Firebase)
-                        
                         await deleteDoc(doc(db, "products", item.id));
                         delSts.innerText = "Đã xóa thành công khỏi cửa hàng!";
                         
