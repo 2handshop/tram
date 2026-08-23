@@ -206,7 +206,7 @@
             
             <div class="text-center mb-8">
                 <!-- Vùng chú thích trong Modal (Tự ẩn nếu trống) -->
-                <p id="modal-note-text" class="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1.5 hidden"></p>
+                <p id="modal-note-text" class="text-sm font-extrabold text-black uppercase tracking-widest mb-2 hidden"></p>
                 <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-2">Thông tin Size</p>
                 <p id="modal-size-text" class="text-lg font-bold text-black tracking-widest"></p>
             </div>
@@ -399,7 +399,7 @@
                 const optUrl = item.imageUrl.includes("tr=") ? item.imageUrl : item.imageUrl + "?tr=w-500,fo-auto,f-webp,q-80";
                 
                 // Chỉ hiển thị Ghi chú (nếu có) và Size, hoàn toàn bỏ tên danh mục
-                const noteHtml = item.note ? `<p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider mb-0.5 truncate w-full px-1">${item.note}</p>` : '';
+                const noteHtml = item.note ? `<p class="text-[11px] md:text-xs font-extrabold text-black uppercase tracking-widest text-center mb-0.5 truncate w-full px-1">${item.note}</p>` : '';
 
                 card.innerHTML = `
                     <div class="relative w-full aspect-[3/4] bg-[#fbfbfb] overflow-hidden border-b border-gray-50 flex items-center justify-center">
@@ -509,7 +509,7 @@
                     <img src="${adminOptUrl}" class="w-full h-full object-contain">
                     <div class="absolute inset-0 bg-black/50 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition p-2 text-center">
                         <span class="text-white text-[9px] font-bold mb-1">${item.sizeText}</span>
-                        ${item.note ? `<span class="text-gray-300 text-[8px] mb-2">${item.note}</span>` : ''}
+                        ${item.note ? `<span class="text-white text-[9px] font-bold mb-2">${item.note}</span>` : ''}
                         <button class="del-btn bg-red-600 text-white text-[9px] font-bold px-3 py-1.5 rounded uppercase tracking-widest shadow">Xóa Bỏ</button>
                     </div>
                 `;
