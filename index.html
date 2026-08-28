@@ -4,14 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <!-- THẺ META ĐỂ HIỂN THỊ CHÚ THÍCH KHI GỬI LINK (ZALO, FACEBOOK) -->
     <meta name="description" content="Crocs and More - Only Authentic. Xem toàn bộ sản phẩm tại đây !">
-    
     <meta property="og:title" content="Trạm Authentic">
     <meta property="og:description" content="Crocs and More - Only Authentic. Xem toàn bộ sản phẩm tại đây !">
     <meta property="og:type" content="website">
-    
-    <!-- ẢNH THUMBNAIL -->
     <meta property="og:image" content="https://i.ibb.co/mC8S0ZFW/742391336-1708520960293067-5985613076031239359-n.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -20,16 +16,13 @@
     
     <title>Trạm Authentic</title>
     
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Font: Be Vietnam Pro -->
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         body {
             font-family: 'Be Vietnam Pro', sans-serif;
-            background-color: #fcfcfc; 
+            background-color: #ffffff; 
             color: #111111;
             -webkit-font-smoothing: antialiased;
         }
@@ -38,31 +31,31 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #e5e7eb; }
 
-        /* Lưới Ảnh - h-fit để ôm sát nội dung */
-        .image-grid { 
-            display: grid; 
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 16px; 
-            align-items: start; 
+        /* BỐ CỤC MASONRY (Pinterest Style) Ôm khít ảnh, không có khoảng trắng thừa */
+        .masonry-grid { 
+            column-count: 2; 
+            column-gap: 12px; 
         }
-        @media (min-width: 768px) { .image-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; } }
-        @media (min-width: 1024px) { .image-grid { grid-template-columns: repeat(4, 1fr); gap: 24px; } }
+        .masonry-item { 
+            break-inside: avoid; 
+            margin-bottom: 12px; 
+            display: inline-block;
+            width: 100%;
+        }
+        @media (min-width: 768px) { 
+            .masonry-grid { column-count: 3; column-gap: 20px; } 
+            .masonry-item { margin-bottom: 20px; }
+        }
+        @media (min-width: 1024px) { 
+            .masonry-grid { column-count: 4; column-gap: 24px; } 
+            .masonry-item { margin-bottom: 24px; }
+        }
 
-        /* Hiệu ứng Hover Thẻ Sản Phẩm */
-        .card-hover-effect { transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s ease; }
-        .group:hover .card-hover-effect { transform: translateY(-6px); box-shadow: 0 15px 35px -5px rgba(0,0,0,0.1); }
-        .img-hover-zoom { transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
-        .group:hover .img-hover-zoom { transform: scale(1.06); }
-
-        /* ANIMATION */
         @keyframes fadeUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
         .animate-fade-up { opacity: 0; animation: fadeUp 0.5s ease-out forwards; }
         @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
         .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
-        @keyframes shimmer { 100% { transform: translateX(100%); } }
-        .skeleton-shimmer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, #f3f4f6 0%, #e5e7eb 50%, #f3f4f6 100%); transform: translateX(-100%); animation: shimmer 1.5s infinite; }
 
-        /* Nút Tag */
         .tag-btn {
             padding: 8px 16px;
             border-radius: 99px;
@@ -73,16 +66,13 @@
             border: 1px solid #e5e7eb;
             color: #6b7280;
             background: #fff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
         .tag-btn.active {
             background: #000;
             color: #fff;
             border-color: #000;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
         }
         
-        /* Buttons Outline */
         .btn-outline {
             display: flex;
             align-items: center;
@@ -101,7 +91,6 @@
         }
         .btn-outline:hover { background: #000; color: #fff; }
         
-        /* Admin Form */
         .admin-input {
             width: 100%;
             padding: 12px;
@@ -113,24 +102,16 @@
         }
         .admin-input:focus { border-color: #000; }
         
-        /* Upload Category Buttons */
-        .upload-cat-btn {
-            padding: 8px 12px;
-            border: 1px solid #e5e7eb;
-            border-radius: 6px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: #6b7280;
-            background: #fff;
-            transition: all 0.2s;
+        .admin-cat-btn {
+            flex: 1; min-width: 30%; text-align: center; padding: 10px; border: 1px solid #e5e7eb;
+            font-size: 10px; font-weight: bold; text-transform: uppercase; transition: all 0.2s;
+            cursor: pointer; color: #6b7280;
         }
-        .upload-cat-btn.active { background: #000; color: #fff; border-color: #000; }
+        .admin-cat-btn.active { background: #000; color: #fff; border-color: #000; }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col relative">
 
-    <!-- Header -->
     <header class="sticky top-0 z-40 w-full bg-white/90 backdrop-blur-md pt-6 pb-4 px-4 text-center cursor-pointer transition duration-300 border-b border-gray-100" onclick="window.scrollTo({ top: 0, behavior: 'smooth' });">
         <h1 class="text-xl md:text-2xl font-extrabold tracking-[0.2em] uppercase text-black">
             TRẠM AUTHENTIC
@@ -141,26 +122,24 @@
         <p class="text-gray-500 text-sm font-medium tracking-wide">Crocs and More - Only Authentic</p>
     </div>
 
-    <!-- Căn giữa Tag Filters -->
+    <!-- Căn giữa Tag Filters PC: 1 dòng / Mobile: nhiều dòng căn giữa -->
     <div id="tags-wrapper" class="w-full pb-8 px-4 relative z-30">
-        <div id="tags-container" class="max-w-3xl mx-auto flex flex-wrap justify-center gap-2.5">
+        <div id="tags-container" class="max-w-5xl mx-auto flex flex-wrap justify-center gap-2.5">
             <!-- JS chèn Tag -->
         </div>
     </div>
 
-    <main class="flex-grow px-4 md:px-12 max-w-[1200px] mx-auto w-full relative pb-20">
-        
+    <main class="flex-grow px-3 md:px-12 max-w-[1200px] mx-auto w-full relative pb-20">
         <div id="loader" class="text-center py-20 flex flex-col items-center justify-center">
             <svg class="animate-spin h-6 w-6 text-gray-300 mb-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
             <span class="font-medium text-gray-400 tracking-widest uppercase text-[10px]">Đang tải kho...</span>
         </div>
         
-        <!-- Khung chứa lưới sản phẩm -->
-        <div id="catalog-grid" class="image-grid hidden"></div>
+        <!-- Khung lưới Masonry -->
+        <div id="catalog-grid" class="masonry-grid hidden"></div>
     </main>
 
-    <!-- Footer -->
-    <footer class="mt-auto bg-white text-black pt-12 pb-12 px-4 border-t border-gray-100 relative z-20 shadow-[0_-5px_20px_rgba(0,0,0,0.02)]">
+    <footer class="mt-auto bg-white text-black pt-12 pb-8 px-4 border-t border-gray-100 relative z-20">
         <div class="max-w-2xl mx-auto flex flex-col items-center text-center">
             <h3 class="text-[14px] font-bold tracking-[0.2em] uppercase text-black mb-4">
                 TRẠM AUTHENTIC
@@ -170,7 +149,6 @@
                 Bảo hành Authentic trọn đời
             </p>
 
-            <!-- Hàng Icons -->
             <div class="flex items-center justify-center gap-6 mb-8 text-gray-600">
                 <a href="https://maps.app.goo.gl/TWMj8grD3ApBEgmj7" target="_blank" title="Vị trí Tiệm" class="hover:text-black transition-transform hover:-translate-y-1">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
@@ -186,106 +164,139 @@
                 </a>
             </div>
 
-            <!-- Nút Admin Portal mờ -->
-            <button id="admin-trigger-btn" class="text-[10px] font-bold uppercase tracking-widest text-gray-300 hover:text-gray-600 transition-colors">
-                Admin Portal
+            <button id="admin-trigger-btn" class="text-[10px] font-bold text-gray-200 hover:text-gray-400 uppercase tracking-widest transition">
+                ADMIN PORTAL
             </button>
         </div>
     </footer>
 
-    <!-- Modal Xem Ảnh Chi tiết -->
+    <!-- Modal Chi tiết Sản phẩm -->
     <div id="product-modal" class="fixed inset-0 z-50 hidden bg-white/95 backdrop-blur-sm flex flex-col p-4 transition-opacity overflow-y-auto">
-        <button id="close-modal" class="absolute top-4 right-4 text-black p-2 z-10 bg-gray-100 rounded-full hover:bg-gray-200 transition">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        <button id="close-modal" class="absolute top-4 right-4 text-black p-2 z-10">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
         
-        <div class="max-w-md w-full mx-auto mt-8 animate-fade-up flex flex-col h-fit pb-10">
-            <!-- Ảnh modal dùng object-contain để hiển thị 100% -->
-            <div class="w-full bg-[#fbfbfb] rounded-2xl border border-gray-100 shadow-sm mb-6 aspect-[3/4] flex items-center justify-center relative p-2">
-                <img id="modal-img" src="" alt="Trạm Authentic" class="w-full h-full object-contain">
+        <div class="max-w-md w-full mx-auto mt-12 animate-fade-up flex flex-col h-fit pb-10">
+            <div class="w-full bg-gray-50 border border-gray-100 mb-6 flex items-center justify-center relative p-1 rounded">
+                <img id="modal-img" src="" alt="Trạm Authentic" class="w-full h-auto object-contain">
             </div>
             
             <div class="text-center mb-8">
-                <!-- Vùng chú thích trong Modal -->
-                <p id="modal-note-text" class="text-sm font-extrabold text-black uppercase tracking-widest mb-2 hidden"></p>
-                <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-2">Thông tin Size</p>
-                <p id="modal-size-text" class="text-lg font-bold text-black tracking-widest"></p>
+                <p id="modal-note-text" class="text-lg font-extrabold text-black tracking-widest mb-1"></p>
+                <p id="modal-size-text" class="text-lg font-extrabold text-black tracking-widest"></p>
             </div>
             
             <div class="flex flex-col gap-3 w-full px-2">
-                <a href="https://zalo.me/0911980814" target="_blank" class="btn-outline rounded-xl">
-                    Nhắn tin Zalo
-                </a>
-                <a href="https://www.facebook.com/profile.php?id=61552216063954" target="_blank" class="btn-outline rounded-xl">
-                    Nhắn tin Facebook
-                </a>
+                <a href="https://zalo.me/0911980814" target="_blank" class="btn-outline">Nhắn tin Zalo</a>
+                <a href="https://www.facebook.com/profile.php?id=61552216063954" target="_blank" class="btn-outline">Nhắn tin Facebook</a>
             </div>
         </div>
     </div>
 
     <!-- Modal Nhập Pass -->
     <div id="password-modal" class="fixed inset-0 z-[70] hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white p-8 max-w-xs w-full text-center animate-fade-in rounded-xl shadow-2xl">
-            <h2 class="text-xs font-bold mb-6 uppercase tracking-widest text-gray-800">Admin Portal</h2>
-            <input type="password" id="pass-input" class="w-full border-b-2 border-gray-200 px-2 py-2 mb-4 text-center text-xl tracking-[0.5em] focus:outline-none focus:border-black transition-colors bg-gray-50 rounded-t" placeholder="****">
+        <div class="bg-white p-8 rounded-none max-w-xs w-full text-center animate-fade-in border border-gray-200">
+            <h2 class="text-xs font-bold mb-6 uppercase tracking-widest">Admin Portal</h2>
+            <input type="password" id="pass-input" class="w-full border-b border-gray-300 px-2 py-2 mb-4 text-center text-xl tracking-[0.5em] focus:outline-none focus:border-black transition-colors rounded-none" placeholder="****">
             <p id="pass-error" class="text-red-500 text-[10px] mb-4 font-bold uppercase tracking-widest hidden">Sai mật mã</p>
             <div class="flex gap-2">
-                <button id="cancel-pass-btn" class="flex-1 py-3 border border-gray-200 rounded-lg text-gray-600 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 transition">Đóng</button>
-                <button id="submit-pass-btn" class="flex-1 py-3 bg-black text-white rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-800 transition shadow-md">Vào</button>
+                <button id="cancel-pass-btn" class="flex-1 py-3 border border-black text-black text-[10px] font-bold uppercase tracking-widest">Đóng</button>
+                <button id="submit-pass-btn" class="flex-1 py-3 bg-black text-white border border-black text-[10px] font-bold uppercase tracking-widest">Vào</button>
             </div>
         </div>
     </div>
 
     <!-- Khu Vực Admin -->
-    <div id="admin-section" class="fixed inset-0 z-[60] hidden bg-gray-50 overflow-y-auto">
-        <div class="max-w-3xl mx-auto p-4 md:p-8 relative min-h-screen pb-24 animate-fade-up bg-white shadow-xl min-h-screen">
-            <div class="flex justify-between items-center border-b pb-4 mb-8 mt-2">
+    <div id="admin-section" class="fixed inset-0 z-[60] hidden bg-white overflow-y-auto">
+        <div class="max-w-3xl mx-auto p-4 md:p-8 relative min-h-screen pb-24 animate-fade-up bg-white">
+            <div class="flex justify-between items-center border-b pb-4 mb-6 mt-2">
                 <h2 class="text-lg font-bold uppercase tracking-widest">Quản Lý Kho</h2>
-                <button id="close-admin" class="text-gray-400 hover:text-black transition font-bold text-xs">ĐÓNG ✕</button>
+                <button id="close-admin" class="text-gray-400 hover:text-black transition text-xs font-bold tracking-widest uppercase">ĐÓNG</button>
             </div>
             
+            <!-- Dashboard Thống Kê -->
+            <div class="bg-black text-white p-6 mb-10 flex flex-col items-center justify-center shadow-lg rounded-xl">
+                <h3 class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-6">Thống kê truy cập Web</h3>
+                <div class="flex w-full justify-around text-center divide-x divide-gray-700">
+                    <div class="flex-1">
+                        <p class="text-3xl font-extrabold tracking-wider mb-1" id="stat-today">0</p>
+                        <p class="text-[10px] uppercase tracking-widest text-gray-400">Hôm nay</p>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-3xl font-extrabold tracking-wider mb-1" id="stat-month">0</p>
+                        <p class="text-[10px] uppercase tracking-widest text-gray-400">Tháng này</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Đăng Sản Phẩm Mới -->
-            <div class="mb-12 bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+            <div class="mb-12">
                 <h3 class="font-bold text-[11px] uppercase tracking-widest text-gray-500 mb-4">Thêm sản phẩm mới</h3>
                 
-                <input type="file" id="image-input" accept="image/*" class="w-full mb-6 text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-6 file:rounded-lg file:border-0 file:bg-gray-100 file:text-[10px] file:font-bold file:uppercase file:tracking-widest hover:file:bg-gray-200 cursor-pointer transition">
+                <input type="file" id="image-input" accept="image/*" class="w-full mb-4 text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-6 file:border file:border-gray-200 file:bg-transparent file:text-[10px] file:font-bold file:uppercase file:tracking-widest hover:file:bg-gray-50 cursor-pointer">
+                
+                <div class="mb-4">
+                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-2">Chọn Danh Mục</label>
+                    <div id="upload-category-btns" class="flex flex-wrap gap-2">
+                        <!-- Nút danh mục sẽ được JS tạo ra ở đây -->
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-2">Nhập Size</label>
+                    <input type="text" id="upload-size" class="admin-input" placeholder="VD: S, M, L hoặc 40, 41, 42">
+                </div>
                 
                 <div class="mb-6">
-                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-3">Chọn Danh Mục</label>
-                    <div id="upload-category-buttons" class="flex flex-wrap gap-2"></div>
+                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-2">Ghi Chú (Tùy chọn)</label>
+                    <input type="text" id="upload-note" class="admin-input" placeholder="VD: Hàng mới về, Lỗi nhẹ... (Để trống nếu không có)">
                 </div>
 
-                <div class="mb-6">
-                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-2">Ghi chú (Tùy chọn)</label>
-                    <input type="text" id="upload-note" class="admin-input rounded-lg bg-gray-50" placeholder="VD: Hàng mới về, New 99%...">
-                </div>
-
-                <div class="mb-8">
-                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-2">Nhập Size (Cách nhau bằng dấu phẩy)</label>
-                    <input type="text" id="upload-size" class="admin-input rounded-lg bg-gray-50" placeholder="VD: S, M, L hoặc 40, 41, 42">
-                </div>
-
-                <button id="upload-btn" class="w-full bg-black text-white py-4 rounded-xl text-[11px] font-bold tracking-widest uppercase hover:bg-gray-800 transition shadow-lg">
+                <button id="upload-btn" class="w-full bg-black text-white py-3.5 text-[11px] font-bold tracking-widest uppercase hover:bg-gray-800 transition">
                     Tải lên Hệ Thống
                 </button>
                 <div id="upload-status" class="text-center text-[11px] mt-4 font-bold h-4"></div>
             </div>
 
             <!-- Xem Kho & Xóa -->
-            <div class="border-t border-gray-100 pt-8">
-                <h3 class="font-bold text-[11px] uppercase tracking-widest text-gray-500 mb-6 text-center">Kho Hàng Hiện Tại</h3>
+            <div class="border-t pt-8">
+                <h3 class="font-bold text-[11px] uppercase tracking-widest text-gray-500 mb-4">Kho Hàng Hiện Tại</h3>
                 
-                <div class="mb-8 flex flex-wrap justify-center gap-2" id="admin-tags-container"></div>
+                <div class="mb-6 flex flex-wrap gap-2" id="admin-tags-container"></div>
                 <div id="admin-delete-status" class="text-[10px] font-bold text-center text-red-600 mb-4 uppercase tracking-widest h-4"></div>
 
-                <div id="admin-product-list" class="grid grid-cols-2 md:grid-cols-4 gap-3 p-2"></div>
+                <!-- Admin Grid (Ép hình vuông cho gọn gàng dễ quản lý) -->
+                <div id="admin-product-list" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <!-- Ảnh admin sinh ra đây -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Sửa Thông Tin -->
+        <div id="admin-edit-modal" class="fixed inset-0 z-[80] hidden bg-black/60 backdrop-blur-sm flex flex-col items-center justify-center p-4">
+            <div class="bg-white p-6 max-w-sm w-full animate-fade-in border border-gray-200">
+                <h3 class="font-bold text-[12px] uppercase tracking-widest text-black mb-6 text-center border-b pb-4">Sửa Sản Phẩm</h3>
                 
-                <!-- Dọn Dẹp Cơ Sở Dữ Liệu -->
-                <div class="mt-8 border-t border-red-100 pt-6">
-                    <button id="migrate-db-btn" class="w-full bg-red-50 text-red-600 border border-red-200 py-3 rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-red-100 transition">
-                        Thực Hiện Dọn Dẹp Ngay (Xóa Crocs cũ, Đổi Áo Đấu thành Crocs)
-                    </button>
-                    <div id="migrate-status" class="text-center text-[10px] mt-3 font-bold text-gray-500 h-4"></div>
+                <div class="mb-4">
+                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-2">Danh Mục</label>
+                    <select id="edit-category" class="admin-input font-bold text-sm"></select>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-2">Size</label>
+                    <input type="text" id="edit-size" class="admin-input font-bold text-sm">
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-[10px] font-bold uppercase tracking-widest mb-2">Ghi Chú</label>
+                    <input type="text" id="edit-note" class="admin-input font-bold text-sm" placeholder="Để trống nếu không có">
+                </div>
+
+                <div id="edit-status" class="text-center text-[10px] font-bold h-4 mb-4"></div>
+
+                <div class="flex gap-2">
+                    <button id="cancel-edit-btn" class="flex-1 py-3 border border-gray-300 text-gray-500 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50">Hủy</button>
+                    <button id="save-edit-btn" class="flex-1 py-3 bg-black text-white border border-black text-[10px] font-bold uppercase tracking-widest hover:bg-gray-800">Lưu</button>
                 </div>
             </div>
         </div>
@@ -293,7 +304,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, serverTimestamp, query, orderBy, where, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, serverTimestamp, query, orderBy, setDoc, getDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBKJPrso3IN2CGwjdE67Ax6SAFhsALre84",
@@ -310,13 +321,12 @@
         const IK_UPLOAD_ENDPOINT = "https://upload.imagekit.io/api/v1/files/upload";
         const IK_AUTH = btoa(IK_PRIVATE_KEY + ":");
 
-        // CẬP NHẬT TAG MỚI (Xóa Crocs cũ, Đổi Áo Đấu thành Crocs, Thêm Áo Đấu mới)
-        const CATEGORIES = ['Tất cả', 'Crocs', 'Áo Đấu', 'Dép Daily', 'Giày', 'Phụ kiện khác', 'Crocs 2hand'];
+        const CATEGORIES = ['Tất cả', 'Crocs', 'Charm Crocs', 'Áo Đấu', 'Dép Daily', 'Giày', 'Phụ kiện khác', 'Crocs 2hand'];
         
         let shoesData = [];
         let currentFilter = 'Tất cả';
         let currentAdminFilter = 'Tất cả';
-        let selectedUploadCategory = 'Crocs';
+        let activeUploadCategory = 'Crocs';
 
         const tagsContainer = document.getElementById('tags-container');
         const catalogGrid = document.getElementById('catalog-grid');
@@ -328,10 +338,51 @@
         const modalNote = document.getElementById('modal-note-text');
         
         const adminSec = document.getElementById('admin-section');
-        const adminUploadCatBtns = document.getElementById('upload-category-buttons');
+        const uploadCategoryBtns = document.getElementById('upload-category-btns');
         const adminTagsContainer = document.getElementById('admin-tags-container');
         const adminProductList = document.getElementById('admin-product-list');
+        const editSelectCat = document.getElementById('edit-category');
         
+        async function updatePageViews() {
+            if(sessionStorage.getItem('visited')) return;
+            sessionStorage.setItem('visited', 'true');
+            
+            const now = new Date();
+            const vnTime = new Date(now.getTime() + (7 * 60 * 60 * 1000));
+            const yyyy = vnTime.getUTCFullYear();
+            const mm = String(vnTime.getUTCMonth() + 1).padStart(2, '0');
+            const dd = String(vnTime.getUTCDate()).padStart(2, '0');
+            
+            const dayKey = `${yyyy}-${mm}-${dd}`;
+            const monthKey = `${yyyy}-${mm}`;
+            
+            const statRef = doc(db, 'analytics', 'views');
+            await setDoc(statRef, {
+                [dayKey]: increment(1),
+                [monthKey]: increment(1)
+            }, { merge: true });
+        }
+
+        async function loadStatsForAdmin() {
+            const now = new Date();
+            const vnTime = new Date(now.getTime() + (7 * 60 * 60 * 1000));
+            const yyyy = vnTime.getUTCFullYear();
+            const mm = String(vnTime.getUTCMonth() + 1).padStart(2, '0');
+            const dd = String(vnTime.getUTCDate()).padStart(2, '0');
+            
+            const dayKey = `${yyyy}-${mm}-${dd}`;
+            const monthKey = `${yyyy}-${mm}`;
+            
+            try {
+                const docSnap = await getDoc(doc(db, 'analytics', 'views'));
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    document.getElementById('stat-today').innerText = data[dayKey] || 0;
+                    document.getElementById('stat-month').innerText = data[monthKey] || 0;
+                }
+            } catch (e) { console.log("Lỗi tải thống kê", e); }
+        }
+
         CATEGORIES.forEach(cat => {
             const btn = document.createElement('button');
             btn.className = `tag-btn ${cat === 'Tất cả' ? 'active' : ''}`;
@@ -345,25 +396,27 @@
             tagsContainer.appendChild(btn);
             
             if(cat !== 'Tất cả') {
-                const upBtn = document.createElement('button');
-                upBtn.className = `upload-cat-btn ${cat === selectedUploadCategory ? 'active' : ''}`;
+                const upBtn = document.createElement('div');
+                upBtn.className = `admin-cat-btn ${cat === activeUploadCategory ? 'active' : ''}`;
                 upBtn.innerText = cat;
                 upBtn.onclick = () => {
-                    document.querySelectorAll('#upload-category-buttons .upload-cat-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('#upload-category-btns .admin-cat-btn').forEach(b => b.classList.remove('active'));
                     upBtn.classList.add('active');
-                    selectedUploadCategory = cat;
+                    activeUploadCategory = cat;
                 };
-                adminUploadCatBtns.appendChild(upBtn);
+                uploadCategoryBtns.appendChild(upBtn);
+
+                const opt = document.createElement('option');
+                opt.value = cat; opt.innerText = cat;
+                editSelectCat.appendChild(opt);
             }
 
             const adBtn = document.createElement('button');
-            adBtn.className = `px-4 py-1.5 rounded-full border text-[10px] font-bold uppercase transition ${cat === 'Tất cả' ? 'bg-black text-white border-black' : 'bg-transparent text-gray-500 border-gray-200 hover:bg-gray-100'}`;
+            adBtn.className = `px-3 py-1 border text-[10px] font-bold uppercase transition ${cat === 'Tất cả' ? 'bg-black text-white border-black' : 'bg-transparent text-gray-500 border-gray-200'}`;
             adBtn.innerText = cat;
             adBtn.onclick = () => {
-                document.querySelectorAll('#admin-tags-container button').forEach(b => { 
-                    b.className = 'px-4 py-1.5 rounded-full border text-[10px] font-bold uppercase transition bg-transparent text-gray-500 border-gray-200 hover:bg-gray-100'; 
-                });
-                adBtn.className = 'px-4 py-1.5 rounded-full border text-[10px] font-bold uppercase transition bg-black text-white border-black';
+                document.querySelectorAll('#admin-tags-container button').forEach(b => { b.className = 'px-3 py-1 border text-[10px] font-bold uppercase transition bg-transparent text-gray-500 border-gray-200'; });
+                adBtn.className = 'px-3 py-1 border text-[10px] font-bold uppercase transition bg-black text-white border-black';
                 currentAdminFilter = cat;
                 renderAdminList();
             };
@@ -387,53 +440,53 @@
             catalogGrid.innerHTML = '';
 
             let filtered = currentFilter === 'Tất cả' ? shoesData : shoesData.filter(s => s.category === currentFilter);
-
-            if(shoesData.length === 0) {
-                filtered = [
-                    { imageUrl: "https://i.ibb.co/mC8S0ZFW/742391336-1708520960293067-5985613076031239359-n.jpg", sizeText: "M, L, XL", note: "Mẫu ví dụ", category: "Crocs" },
-                    { imageUrl: "https://i.ibb.co/mC8S0ZFW/742391336-1708520960293067-5985613076031239359-n.jpg", sizeText: "40, 41, 42", note: "", category: "Giày" }
-                ];
+            
+            if(currentFilter === 'Tất cả' && filtered.length > 40) {
+                filtered = filtered.slice(0, 40);
             }
 
             if(filtered.length === 0) {
-                catalogGrid.innerHTML = '<div class="col-span-full py-10 text-center text-xs text-gray-400 uppercase tracking-widest font-bold">Chưa có sản phẩm</div>';
+                catalogGrid.innerHTML = '<div class="w-full inline-block text-center text-xs text-gray-400 uppercase tracking-widest font-bold mt-10">Chưa có sản phẩm</div>';
                 return;
             }
 
             filtered.forEach(item => {
+                const itemWrapper = document.createElement('div');
+                itemWrapper.className = 'masonry-item animate-fade-up';
+                
                 const card = document.createElement('div');
-                card.className = 'group cursor-pointer flex flex-col h-fit bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm animate-fade-up card-hover-effect';
+                card.className = 'group cursor-pointer bg-gray-50 border border-gray-100 p-2.5 transition-all hover:border-black hover:shadow-lg rounded-md flex flex-col';
                 
-                const optUrl = item.imageUrl.includes("tr=") ? item.imageUrl : item.imageUrl + "?tr=w-500,fo-auto,f-webp,q-80";
+                const optUrl = item.imageUrl.includes("tr=") ? item.imageUrl : item.imageUrl + "?tr=w-500,f-webp,q-80";
                 
-                // Hiển thị Ghi chú in đậm to như Size
-                const noteHtml = item.note ? `<p class="text-[11px] md:text-xs font-extrabold text-black uppercase tracking-widest text-center mb-0.5 truncate w-full px-1">${item.note}</p>` : '';
-
+                // Loại bỏ truncate, dùng leading-snug để chữ dài tự rớt dòng thoải mái
+                const noteHtml = item.noteText ? `<p class="text-[11px] font-extrabold text-black uppercase tracking-widest text-center px-1 mb-1 leading-snug">${item.noteText}</p>` : '';
+                
                 card.innerHTML = `
-                    <div class="relative w-full aspect-[3/4] bg-[#fbfbfb] overflow-hidden border-b border-gray-50 flex items-center justify-center">
-                        <div class="skeleton-shimmer"></div>
-                        <img src="${optUrl}" class="w-full h-full object-contain relative z-10 opacity-0 img-hover-zoom" loading="lazy" onload="this.classList.remove('opacity-0'); this.previousElementSibling.remove();">
+                    <div class="relative w-full rounded overflow-hidden mb-3 bg-[#e5e7eb] flex items-center justify-center">
+                        <img src="${optUrl}" class="w-full h-auto block relative z-10" loading="lazy">
                     </div>
-                    <div class="p-3 md:p-4 flex flex-col items-center justify-center bg-white">
-                        ${noteHtml}
-                        <p class="text-[11px] md:text-xs font-extrabold text-black uppercase tracking-widest text-center truncate w-full px-1">Size: ${item.sizeText}</p>
-                    </div>
+                    ${noteHtml}
+                    <p class="text-[11px] font-extrabold text-black uppercase tracking-widest text-center px-1 leading-snug">Size: ${item.sizeText}</p>
                 `;
 
                 card.onclick = () => {
                     modalImg.src = item.imageUrl + "?tr=w-800,f-webp,q-90";
-                    modalSize.innerText = item.sizeText;
+                    modalSize.innerText = "Size: " + item.sizeText;
                     
-                    if(item.note) {
-                        modalNote.innerText = item.note;
+                    if (item.noteText) {
+                        modalNote.innerText = item.noteText;
                         modalNote.classList.remove('hidden');
                     } else {
+                        modalNote.innerText = "";
                         modalNote.classList.add('hidden');
                     }
-
+                    
                     modal.classList.remove('hidden');
                 };
-                catalogGrid.appendChild(card);
+                
+                itemWrapper.appendChild(card);
+                catalogGrid.appendChild(itemWrapper);
             });
         }
         
@@ -453,6 +506,7 @@
             if (document.getElementById('pass-input').value === '0814') {
                 document.getElementById('password-modal').classList.add('hidden');
                 adminSec.classList.remove('hidden');
+                loadStatsForAdmin();
                 renderAdminList();
             } else { document.getElementById('pass-error').classList.remove('hidden'); }
         }
@@ -468,29 +522,29 @@
             if(!file || !size) { sts.innerHTML = "<span class='text-red-500'>Vui lòng chọn ảnh & nhập size!</span>"; return; }
             
             uploadBtn.disabled = true; uploadBtn.innerText = "Đang Tải Ảnh...";
-            sts.innerHTML = "<span class='text-blue-500'>Đang đẩy lên kho ảnh...</span>";
+            sts.innerHTML = "<span class='text-blue-500'>Đang đẩy lên ImageKit...</span>";
 
             try {
                 const formData = new FormData();
                 formData.append("file", file);
-                formData.append("fileName", "tram-" + Date.now());
+                formData.append("fileName", "tram-sp-" + Date.now());
                 formData.append("folder", "/tramauthentic"); 
 
                 const resIK = await fetch(IK_UPLOAD_ENDPOINT, { method: "POST", headers: { "Authorization": "Basic " + IK_AUTH }, body: formData });
-                if (!resIK.ok) throw new Error("Lỗi tải ảnh");
+                if (!resIK.ok) throw new Error("ImageKit lỗi");
                 const ikData = await resIK.json();
 
                 sts.innerHTML = "<span class='text-blue-500'>Đang lưu Dữ liệu...</span>";
                 await addDoc(collection(db, "products"), {
                     imageUrl: ikData.url,
                     imageKitFileId: ikData.fileId,
-                    category: selectedUploadCategory,
+                    category: activeUploadCategory,
                     sizeText: size,
-                    note: note,
+                    noteText: note,
                     createdAt: serverTimestamp() 
                 });
 
-                sts.innerHTML = "<span class='text-green-600'>Thành Công!</span>";
+                sts.innerHTML = "<span class='text-green-500'>Thành Công!</span>";
                 document.getElementById('image-input').value = '';
                 document.getElementById('upload-size').value = '';
                 document.getElementById('upload-note').value = '';
@@ -498,40 +552,47 @@
                 await fetchProducts(); renderCatalog(); renderAdminList();
             } catch(e) { sts.innerHTML = `<span class='text-red-500'>Lỗi: ${e.message}</span>`; }
             
-            setTimeout(() => { uploadBtn.disabled = false; uploadBtn.innerText = "Tải lên Hệ thống"; sts.innerHTML = ""; }, 2500);
+            setTimeout(() => { uploadBtn.disabled = false; uploadBtn.innerText = "Tải lên Hệ thống"; sts.innerHTML = ""; }, 2000);
         };
 
+        let currentEditId = null;
+        const editModal = document.getElementById('admin-edit-modal');
+        
         function renderAdminList() {
             adminProductList.innerHTML = '';
             let filtered = currentAdminFilter === 'Tất cả' ? shoesData : shoesData.filter(s => s.category === currentAdminFilter);
 
             filtered.forEach(item => {
                 const div = document.createElement('div');
-                div.className = 'relative aspect-[3/4] border border-gray-200 group rounded-xl overflow-hidden bg-gray-50 flex items-center justify-center';
-                
-                const adminOptUrl = item.imageUrl.includes("tr=") ? item.imageUrl : item.imageUrl + "?tr=w-300,fo-auto,f-webp";
-                
+                // Admin dùng ảnh vuông cắt giữa (object-cover) cho gọn
+                div.className = 'relative aspect-square border border-gray-200 group bg-gray-50 rounded overflow-hidden';
                 div.innerHTML = `
-                    <img src="${adminOptUrl}" class="w-full h-full object-contain">
-                    <div class="absolute inset-0 bg-black/50 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition p-2 text-center">
-                        <span class="text-white text-[9px] font-bold mb-1">${item.sizeText}</span>
-                        ${item.note ? `<span class="text-white text-[9px] font-bold mb-2">${item.note}</span>` : ''}
-                        <button class="del-btn bg-red-600 text-white text-[9px] font-bold px-3 py-1.5 rounded uppercase tracking-widest shadow">Xóa Bỏ</button>
+                    <img src="${item.imageUrl}?tr=w-200,h-200,fo-auto" class="w-full h-full object-cover p-1">
+                    <div class="absolute inset-0 bg-black/60 flex flex-col items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition backdrop-blur-sm">
+                        <button class="edit-btn bg-white text-black text-[10px] font-bold px-5 py-2 uppercase tracking-widest w-24 hover:bg-gray-200 rounded-sm">Sửa</button>
+                        <button class="del-btn bg-red-600 text-white text-[10px] font-bold px-5 py-2 uppercase tracking-widest w-24 hover:bg-red-700 rounded-sm">Xóa</button>
                     </div>
                 `;
                 
+                div.querySelector('.edit-btn').onclick = () => {
+                    currentEditId = item.id;
+                    document.getElementById('edit-category').value = item.category || 'Giày';
+                    document.getElementById('edit-size').value = item.sizeText || '';
+                    document.getElementById('edit-note').value = item.noteText || '';
+                    document.getElementById('edit-status').innerHTML = '';
+                    editModal.classList.remove('hidden');
+                };
+
                 div.querySelector('.del-btn').onclick = async () => {
-                    const ans = confirm("Xóa sản phẩm này khỏi cửa hàng?");
+                    const ans = confirm("Hành động này sẽ XÓA SẢN PHẨM KHỎI WEB. Tiếp tục?");
                     if(!ans) return;
                     
                     const delSts = document.getElementById('admin-delete-status');
                     delSts.innerText = "Đang xóa dữ liệu...";
                     
                     try {
-                        // CHỈ XÓA FIREBASE TRÁNH LỖI CORS IMAGEKIT
                         await deleteDoc(doc(db, "products", item.id));
-                        delSts.innerText = "Đã xóa thành công khỏi cửa hàng!";
-                        
+                        delSts.innerText = "Đã gỡ sản phẩm!";
                         await fetchProducts(); renderCatalog(); renderAdminList();
                         setTimeout(() => { delSts.innerText = ""; }, 2500);
                     } catch(e) { delSts.innerText = "Lỗi Xóa: " + e.message; }
@@ -540,43 +601,32 @@
             });
         }
 
-        // TOOL DỌN DẸP & ĐỔI TÊN HÀNG LOẠT
-        document.getElementById('migrate-db-btn').onclick = async () => {
-            const ans = confirm("CẢNH BÁO: Bạn có chắc chắn muốn Xóa toàn bộ SP Crocs cũ và Đổi tên SP Áo Đấu thành Crocs trên Database? (CHỈ BẤM 1 LẦN)");
-            if(!ans) return;
+        document.getElementById('cancel-edit-btn').onclick = () => editModal.classList.add('hidden');
+        document.getElementById('save-edit-btn').onclick = async () => {
+            const newCat = document.getElementById('edit-category').value;
+            const newSize = document.getElementById('edit-size').value.trim();
+            const newNote = document.getElementById('edit-note').value.trim();
+            const sts = document.getElementById('edit-status');
             
-            const sts = document.getElementById('migrate-status');
-            sts.innerText = "Đang quét và xử lý dữ liệu... Vui lòng không tắt trang.";
-            document.getElementById('migrate-db-btn').disabled = true;
+            if(!newSize) { sts.innerHTML = "<span class='text-red-500'>Vui lòng nhập Size!</span>"; return; }
+            sts.innerHTML = "<span class='text-blue-500'>Đang lưu...</span>";
             
             try {
-                // 1. Xóa SP Crocs cũ
-                const qCrocs = query(collection(db, "products"), where("category", "==", "Crocs"));
-                const snapCrocs = await getDocs(qCrocs);
-                const deletePromises = [];
-                snapCrocs.forEach(d => { deletePromises.push(deleteDoc(doc(db, "products", d.id))); });
-                await Promise.all(deletePromises);
-                
-                // 2. Chuyển Áo Đấu thành Crocs
-                const qAoDau = query(collection(db, "products"), where("category", "==", "Áo Đấu"));
-                const snapAoDau = await getDocs(qAoDau);
-                const updatePromises = [];
-                snapAoDau.forEach(d => { updatePromises.push(updateDoc(doc(db, "products", d.id), { category: "Crocs" })); });
-                await Promise.all(updatePromises);
-                
-                sts.innerText = `Thành công! Đã xóa ${snapCrocs.size} SP Crocs cũ, chuyển ${snapAoDau.size} SP Áo Đấu sang Crocs.`;
-                
-                await fetchProducts();
-                renderCatalog();
+                await updateDoc(doc(db, "products", currentEditId), {
+                    category: newCat,
+                    sizeText: newSize,
+                    noteText: newNote
+                });
+                sts.innerHTML = "<span class='text-green-500'>Đã cập nhật!</span>";
+                await fetchProducts(); 
+                renderCatalog(); 
                 renderAdminList();
-            } catch (e) {
-                sts.innerText = "Lỗi: " + e.message;
-            } finally {
-                document.getElementById('migrate-db-btn').disabled = false;
-            }
+                setTimeout(() => { editModal.classList.add('hidden'); }, 1000);
+            } catch(e) { sts.innerHTML = `<span class='text-red-500'>Lỗi: ${e.message}</span>`; }
         };
 
         async function init() {
+            updatePageViews();
             await fetchProducts();
             renderCatalog();
         }
