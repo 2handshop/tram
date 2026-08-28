@@ -200,12 +200,13 @@
         </button>
         
         <div class="max-w-md w-full mx-auto mt-8 animate-fade-up flex flex-col h-fit pb-10">
+            <!-- Ảnh modal dùng object-contain để hiển thị 100% -->
             <div class="w-full bg-[#fbfbfb] rounded-2xl border border-gray-100 shadow-sm mb-6 aspect-[3/4] flex items-center justify-center relative p-2">
                 <img id="modal-img" src="" alt="Trạm Authentic" class="w-full h-full object-contain">
             </div>
             
             <div class="text-center mb-8">
-                <!-- Vùng chú thích trong Modal (Tự ẩn nếu trống) -->
+                <!-- Vùng chú thích trong Modal -->
                 <p id="modal-note-text" class="text-sm font-extrabold text-black uppercase tracking-widest mb-2 hidden"></p>
                 <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-2">Thông tin Size</p>
                 <p id="modal-size-text" class="text-lg font-bold text-black tracking-widest"></p>
@@ -254,7 +255,6 @@
                     <div id="upload-category-buttons" class="flex flex-wrap gap-2"></div>
                 </div>
 
-                <!-- Ô Ghi Chú Mới -->
                 <div class="mb-6">
                     <label class="block text-[10px] font-bold uppercase tracking-widest mb-2">Ghi chú (Tùy chọn)</label>
                     <input type="text" id="upload-note" class="admin-input rounded-lg bg-gray-50" placeholder="VD: Hàng mới về, New 99%...">
@@ -279,13 +279,21 @@
                 <div id="admin-delete-status" class="text-[10px] font-bold text-center text-red-600 mb-4 uppercase tracking-widest h-4"></div>
 
                 <div id="admin-product-list" class="grid grid-cols-2 md:grid-cols-4 gap-3 p-2"></div>
+                
+                <!-- Dọn Dẹp Cơ Sở Dữ Liệu -->
+                <div class="mt-8 border-t border-red-100 pt-6">
+                    <button id="migrate-db-btn" class="w-full bg-red-50 text-red-600 border border-red-200 py-3 rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-red-100 transition">
+                        Thực Hiện Dọn Dẹp Ngay (Xóa Crocs cũ, Đổi Áo Đấu thành Crocs)
+                    </button>
+                    <div id="migrate-status" class="text-center text-[10px] mt-3 font-bold text-gray-500 h-4"></div>
+                </div>
             </div>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, serverTimestamp, query, orderBy, where, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBKJPrso3IN2CGwjdE67Ax6SAFhsALre84",
@@ -302,14 +310,14 @@
         const IK_UPLOAD_ENDPOINT = "https://upload.imagekit.io/api/v1/files/upload";
         const IK_AUTH = btoa(IK_PRIVATE_KEY + ":");
 
-        const CATEGORIES = ['Tất cả', 'Áo Đấu', 'Crocs', 'Dép Daily', 'Giày', 'Phụ kiện khác', 'Crocs 2hand'];
+        // CẬP NHẬT TAG MỚI (Xóa Crocs cũ, Đổi Áo Đấu thành Crocs, Thêm Áo Đấu mới)
+        const CATEGORIES = ['Tất cả', 'Crocs', 'Áo Đấu', 'Dép Daily', 'Giày', 'Phụ kiện khác', 'Crocs 2hand'];
         
         let shoesData = [];
         let currentFilter = 'Tất cả';
         let currentAdminFilter = 'Tất cả';
-        let selectedUploadCategory = 'Áo Đấu';
+        let selectedUploadCategory = 'Crocs';
 
-        // DOM
         const tagsContainer = document.getElementById('tags-container');
         const catalogGrid = document.getElementById('catalog-grid');
         const loader = document.getElementById('loader');
@@ -382,7 +390,7 @@
 
             if(shoesData.length === 0) {
                 filtered = [
-                    { imageUrl: "https://i.ibb.co/mC8S0ZFW/742391336-1708520960293067-5985613076031239359-n.jpg", sizeText: "M, L, XL", note: "Mẫu ví dụ", category: "Áo Đấu" },
+                    { imageUrl: "https://i.ibb.co/mC8S0ZFW/742391336-1708520960293067-5985613076031239359-n.jpg", sizeText: "M, L, XL", note: "Mẫu ví dụ", category: "Crocs" },
                     { imageUrl: "https://i.ibb.co/mC8S0ZFW/742391336-1708520960293067-5985613076031239359-n.jpg", sizeText: "40, 41, 42", note: "", category: "Giày" }
                 ];
             }
@@ -398,7 +406,7 @@
                 
                 const optUrl = item.imageUrl.includes("tr=") ? item.imageUrl : item.imageUrl + "?tr=w-500,fo-auto,f-webp,q-80";
                 
-                // Chỉ hiển thị Ghi chú (nếu có) và Size, hoàn toàn bỏ tên danh mục
+                // Hiển thị Ghi chú in đậm to như Size
                 const noteHtml = item.note ? `<p class="text-[11px] md:text-xs font-extrabold text-black uppercase tracking-widest text-center mb-0.5 truncate w-full px-1">${item.note}</p>` : '';
 
                 card.innerHTML = `
@@ -431,7 +439,6 @@
         
         document.getElementById('close-modal').onclick = () => modal.classList.add('hidden');
 
-        // Admin Auth
         document.getElementById('admin-trigger-btn').onclick = () => {
             document.getElementById('password-modal').classList.remove('hidden');
             document.getElementById('pass-input').value = '';
@@ -451,7 +458,6 @@
         }
         document.getElementById('close-admin').onclick = () => adminSec.classList.add('hidden');
 
-        // UPLOAD DATA
         const uploadBtn = document.getElementById('upload-btn');
         uploadBtn.onclick = async () => {
             const file = document.getElementById('image-input').files[0];
@@ -480,7 +486,7 @@
                     imageKitFileId: ikData.fileId,
                     category: selectedUploadCategory,
                     sizeText: size,
-                    note: note, // Lưu ghi chú
+                    note: note,
                     createdAt: serverTimestamp() 
                 });
 
@@ -522,6 +528,7 @@
                     delSts.innerText = "Đang xóa dữ liệu...";
                     
                     try {
+                        // CHỈ XÓA FIREBASE TRÁNH LỖI CORS IMAGEKIT
                         await deleteDoc(doc(db, "products", item.id));
                         delSts.innerText = "Đã xóa thành công khỏi cửa hàng!";
                         
@@ -532,6 +539,42 @@
                 adminProductList.appendChild(div);
             });
         }
+
+        // TOOL DỌN DẸP & ĐỔI TÊN HÀNG LOẠT
+        document.getElementById('migrate-db-btn').onclick = async () => {
+            const ans = confirm("CẢNH BÁO: Bạn có chắc chắn muốn Xóa toàn bộ SP Crocs cũ và Đổi tên SP Áo Đấu thành Crocs trên Database? (CHỈ BẤM 1 LẦN)");
+            if(!ans) return;
+            
+            const sts = document.getElementById('migrate-status');
+            sts.innerText = "Đang quét và xử lý dữ liệu... Vui lòng không tắt trang.";
+            document.getElementById('migrate-db-btn').disabled = true;
+            
+            try {
+                // 1. Xóa SP Crocs cũ
+                const qCrocs = query(collection(db, "products"), where("category", "==", "Crocs"));
+                const snapCrocs = await getDocs(qCrocs);
+                const deletePromises = [];
+                snapCrocs.forEach(d => { deletePromises.push(deleteDoc(doc(db, "products", d.id))); });
+                await Promise.all(deletePromises);
+                
+                // 2. Chuyển Áo Đấu thành Crocs
+                const qAoDau = query(collection(db, "products"), where("category", "==", "Áo Đấu"));
+                const snapAoDau = await getDocs(qAoDau);
+                const updatePromises = [];
+                snapAoDau.forEach(d => { updatePromises.push(updateDoc(doc(db, "products", d.id), { category: "Crocs" })); });
+                await Promise.all(updatePromises);
+                
+                sts.innerText = `Thành công! Đã xóa ${snapCrocs.size} SP Crocs cũ, chuyển ${snapAoDau.size} SP Áo Đấu sang Crocs.`;
+                
+                await fetchProducts();
+                renderCatalog();
+                renderAdminList();
+            } catch (e) {
+                sts.innerText = "Lỗi: " + e.message;
+            } finally {
+                document.getElementById('migrate-db-btn').disabled = false;
+            }
+        };
 
         async function init() {
             await fetchProducts();
